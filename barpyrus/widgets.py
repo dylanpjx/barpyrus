@@ -23,7 +23,7 @@ class Widget:
         self.subwidgets = []
         self.theme = None
         self.custom_render = None # here the user can override a widgets render()
-    def timeout(self):
+    def timeout(self) -> bool:
         # called on timeout. Return true if an update is needed
         return False
     def eventinputs(self): # returns a list of Core.EventInput objects
@@ -103,24 +103,24 @@ class RawLabel(Widget):
     def __init__(self,label):
         super(RawLabel,self).__init__()
         self.label = label
-    def render(self, p):
-        p.drawRaw(self.label)
+    def render(self, painter):
+        painter.drawRaw(self.label)
 
 class Label(Widget):
     def __init__(self,label):
         super(Label,self).__init__()
         self.label = label
-    def render(self, p):
-        p += self.label
+    def render(self, painter):
+        painter += self.label
 
 
 class ColorLabel(RawLabel):
     def __init__(self, label, color):
         super().__init__(label=label)
         self.color = color
-    def render(self, p):
-        p.fg(self.color)
-        super().render(p)
+    def render(self, painter):
+        painter.fg(self.color)
+        super().render(painter)
 
 class Button(Widget):
     def __init__(self, label):
@@ -128,11 +128,11 @@ class Button(Widget):
         self.label = label
         self.buttons = [ 1 ]
         self.callback = None
-    def render(self, p):
+    def render(self, painter):
         if isinstance(self.label, Widget):
-            self.label.render(p)
+            self.label.render(painter)
         else:
-            p += self.label
+            painter += self.label
     def on_click(self, button):
         if self.callback:
             self.callback(button)
@@ -194,28 +194,28 @@ class Switcher(Widget):
         self.selection = selection
     def choice_clicked(self, idx):
         self.selection = idx
-    def render(self, p):
-        p.fg(self.normalfg)
-        p.bg(self.normalbg)
-        p.ul(self.normalbg)
-        p.set_flag(p.overline | p.underline, True)
-        p.space(3)
+    def render(self, painter):
+        painter.fg(self.normalfg)
+        painter.bg(self.normalbg)
+        painter.ul(self.normalbg)
+        painter.set_flag(painter.overline | painter.underline, True)
+        painter.space(3)
         for i, btn in enumerate(self.option_buttons):
             if i == self.selection:
-                p.fg(self.focusfg)
-                p.bg(self.focusbg)
-            p.space(3)
-            p.widget(btn)
-            p.space(3)
+               painter.fg(self.focusfg)
+               painter.bg(self.focusbg)
+            painter.space(3)
+            painter.widget(btn)
+            painter.space(3)
             if i == self.selection:
-                p.fg(self.normalfg)
-                p.bg(self.normalbg)
-                p.ul(self.normalbg)
-        p.space(3)
-        p.bg()
-        p.fg()
-        p.ul()
-        p.set_flag(p.overline | p.underline, False)
+               painter.fg(self.normalfg)
+               painter.bg(self.normalbg)
+               painter.ul(self.normalbg)
+        painter.space(3)
+        painter.bg()
+        painter.fg()
+        painter.ul()
+        painter.set_flag(painter.overline | painter.underline, False)
 
 class StackedLayout(Widget):
     """Switch between multiple widgets. If the selected widget is_empty(), then

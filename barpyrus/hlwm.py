@@ -122,7 +122,7 @@ class HLWMTagInfo:
         self.urgent = False
         self.visible = True
         self.empty = False
-        self.activecolor = GREEN_DARK
+        self.activecolor = '#f0f0f0'
         self.emphbg = BG
         self.index = 0
     def parse(self, string, index): # parse a tag_status string
@@ -190,7 +190,7 @@ class HLWMTags(Widget):
         self.tag_renderer = tag_renderer
         self.monitor = monitor
         self.activecolor = hlwm('attr theme.tiling.active.color'.split(' '))
-        self.emphbg = GREEN_DARK
+        self.emphbg = '#f0f0f0'
         self.update_tags()
         for event in ['tag_changed', 'tag_flags', 'tag_added', 'tag_removed', 'tag_renamed']:
             hlwm.enhook(event, self.update_tags)
