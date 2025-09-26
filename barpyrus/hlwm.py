@@ -167,7 +167,7 @@ class HLWMTagInfo:
             painter.bg(PURPLE_DARK)
             painter.set_flag(Painter.overline, False)
         if self.focused:
-            painter.fg(FG)
+            painter.fg('#f8f8f2')
             painter.ol(self.activecolor)
         else:
             painter.ol(BG2)
